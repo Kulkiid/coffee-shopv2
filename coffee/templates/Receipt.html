@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Order Receipt | Coffee Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/receipt.css' %}?v=1">
+</head>
+<body>
+    <main class="receipt-page">
+        <article class="receipt-paper" aria-labelledby="receipt-title">
+            <header class="receipt-header">
+                <a class="receipt-brand" href="{% url 'home' %}" aria-label="Coffee Shop home">
+                    <i class="fa-solid fa-mug-hot" aria-hidden="true"></i>
+                    <span>☕Coffee Shop</span>
+                </a>
+                <p class="receipt-kicker">ORDER RECEIPT</p>
+                <h1 id="receipt-title">Thanks, {{ customer.name }}.</h1>
+                <p class="receipt-intro">Your order has been received.</p>
+            </header>
+
+            <section class="receipt-meta" aria-label="Order information">
+                <div>
+                    <span>Order reference</span>
+                    <strong>{{ order_reference }}</strong>
+                </div>
+                <div>
+                    <span>Date and time</span>
+                    <strong>{{ order_date|date:"M j, Y · g:i A" }}</strong>
+                </div>
+            </section>
+
+            <section class="receipt-customer" aria-labelledby="customer-heading">
+                <h2 id="customer-heading">Customer details</h2>
+                <dl>
+                    <div><dt>Name</dt><dd>{{ customer.name }}</dd></div>
+                    <div><dt>Email</dt><dd>{{ customer.email }}</dd></div>
+                    <div><dt>Location</dt><dd>{{ customer.location }}</dd></div>
+                </dl>
+            </section>
+
+            <section class="receipt-order" aria-labelledby="items-heading">
+                <h2 id="items-heading">Your order</h2>
+                <table>
+                    <thead>
+                        <tr><th scope="col">Item</th><th scope="col">Price</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for item in receipt_items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>${{ item.price|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr><th scope="row">Estimated total</th><td>${{ order_total|floatformat:2 }}</td></tr>
+                    </tfoot>
+                </table>
+                <p class="receipt-disclaimer">Menu prices are starting prices. Your final total may change based on your selections.</p>
+            </section>
+
+            <footer class="receipt-footer">
+                <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                <p>Thank you for choosing us. We look forward to serving you.</p>
+            </footer>
+        </article>
+
+        <nav class="receipt-actions" aria-label="Receipt actions">
+            <button type="button" id="print-receipt"><i class="fa-solid fa-print" aria-hidden="true"></i> Print Receipt</button>
+            <a href="{% url 'home' %}#menu"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to menu</a>
+        </nav>
+    </main>
+    <script src="{% static 'js/receipt.js' %}?v=1"></script>
+</body>
+</html>

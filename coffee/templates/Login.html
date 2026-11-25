@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>☕Coffee Shop Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}?v=1">
+</head>
+<body>
+    <main class="login-shell">
+        <section class="login-visual" aria-label="☕Coffee shop">
+            <img src="{% static 'coffee-hero-section.png' %}" alt="A freshly prepared cup of coffee">
+            <a class="visual-brand" href="{% url 'login' %}"><i class="fa-solid fa-mug-hot" aria-hidden="true"></i> Coffee Shop</a>
+            <div class="visual-caption">
+                <p class="visual-eyebrow">A GOOD DAY STARTS HERE</p>
+                <h1>Your coffee moment<br>is waiting.</h1>
+                <p>Freshly made, warmly served, and always worth the pause.</p>
+            </div>
+            <p class="visual-credit">Coffee, made for your everyday.</p>
+        </section>
+
+        <section class="login-panel" aria-labelledby="login-title">
+            <div class="login-content">
+                <p class="login-eyebrow"><i class="fa-solid fa-sun" aria-hidden="true"></i> Welcome back</p>
+                <h2 id="login-title">Sign in</h2>
+                <p class="login-description">Enter your account details to continue to the coffee shop.</p>
+
+                {% if form.non_field_errors %}
+                <div class="login-error" role="alert">
+                    {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post" class="login-form">
+                    {% csrf_token %}
+                    <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                    <div class="login-input-wrap">
+                        <i class="fa-regular fa-user" aria-hidden="true"></i>
+                        {{ form.username }}
+                    </div>
+                    {% for error in form.username.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+
+                    <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                    <div class="login-input-wrap">
+                        <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                        {{ form.password }}
+                        <button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false">
+                            <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    {% for error in form.password.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+
+                    <button class="login-submit" type="submit">Continue <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </form>
+
+                <p class="login-footnote"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Sign in to view the menu and place an order.</p>
+            </div>
+        </section>
+    </main>
+    <script src="{% static 'js/login.js' %}?v=1"></script>
+</body>
+</html>
